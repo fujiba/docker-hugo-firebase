@@ -5,14 +5,18 @@ LABEL maintainer="fujiba@fujiba.net"
 
 # variables
 ENV HUGO_VERSION 0.66.0
+ENV HUGO_NAME="hugo_extended_${HUGO_VERSION}_Linux-64bit"
+ENV HUGO_BASE_URL="https://github.com/gohugoio/hugo/releases/download"
+ENV HUGO_URL="${HUGO_BASE_URL}/v${HUGO_VERSION}/${HUGO_NAME}.tar.gz"
 
 # install hugo
 RUN set -x && \
-  apk add --update --upgrade --no-cache wget ca-certificates && \
+  apk add --update --upgrade --no-cache wget ca-certificates \
+  git bash libc6-compat libstdc++ && \
   # make sure we have up-to-date certificates
   update-ca-certificates && \
   cd /tmp &&\
-  wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_Linux-64bit.tar.gz -O hugo.tar.gz && \
+  wget "${HUGO_URL}" -O hugo.tar.gz && \
   tar xzf hugo.tar.gz && \
   mv hugo /usr/bin/hugo && \
   rm -r * && \
